@@ -23,3 +23,14 @@ INSERT INTO auto_users (login, password) VALUES ('Ivanov', 'root');
 INSERT INTO auto_users (login, password) VALUES ('Petrov', 'root');
 INSERT INTO auto_users (login, password) VALUES ('Sidorov', 'root');
 
+
+--changset nikishin:task_tomany
+CREATE TABLE PRICE_HISTORY(
+   id SERIAL PRIMARY KEY,
+   before BIGINT not null,
+   after BIGINT not null,
+   created TIMESTAMP WITHOUT TIMEZONE DEFAULT now()
+);
+
+--changset nikishin:add_post_price_history
+alter table auto_posts add column id_price_history int references PRICE_HISTORY(id);
