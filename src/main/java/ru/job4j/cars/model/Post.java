@@ -30,4 +30,12 @@ public class Post {
     @JoinColumn(name = "id_price_history")
     private List<PriceHistory> history;
 
+    @ManyToMany
+    @JoinTable(
+            name = "participates",
+            joinColumns = { @JoinColumn(name = "post_id") },
+            inverseJoinColumns = { @JoinColumn(name = "user_id") }
+    )
+    private List<User> participates;
+
 }

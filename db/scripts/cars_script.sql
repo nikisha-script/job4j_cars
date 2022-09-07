@@ -34,3 +34,10 @@ CREATE TABLE PRICE_HISTORY(
 
 --changset nikishin:add_post_price_history
 alter table auto_posts add column id_price_history int references PRICE_HISTORY(id);
+
+--changset nikishin:add_participates
+create table participates (
+    id serial primary key,
+    post_id int not null REFERENCES auto_posts(id),
+    user_id int not null REFERENCES auto_users(id)
+);
