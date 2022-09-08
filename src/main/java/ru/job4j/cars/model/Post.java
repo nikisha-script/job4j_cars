@@ -30,6 +30,10 @@ public class Post {
     @JoinColumn(name = "id_price_history")
     private List<PriceHistory> history;
 
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "car_id")
+    private Car car;
+
     @ManyToMany
     @JoinTable(
             name = "participates",

@@ -5,6 +5,7 @@ import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
 import ru.job4j.cars.model.Post;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -15,7 +16,12 @@ public class PostRepository implements Crud {
     private final SessionFactory sf;
 
     public List<Post> findAllPostFromLastDay() {
-        return query("from Post as p where created = now()", Post.class, sf);
+        return query(
+                "from Post as p where created = :fTimestampNow",
+                Post.class,
+                Map.of("fTimestampNow", LocalDateTime.now().getDayOfMonth()),
+                sf
+        );
     }
 
     public List<Post> findAllPostFromCarHasPhoto() {
