@@ -20,9 +20,11 @@ public class OwnerHistory {
     private int id;
 
     @Column(name = "startAt")
+    @NonNull
     private Timestamp startAt;
 
     @Column(name = "endAt")
+    @NonNull
     private Timestamp endAt;
 
 }
