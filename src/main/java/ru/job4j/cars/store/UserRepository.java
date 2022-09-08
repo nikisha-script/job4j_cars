@@ -1,6 +1,7 @@
 package ru.job4j.cars.store;
 
 import lombok.AllArgsConstructor;
+import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
 import ru.job4j.cars.model.User;
 
@@ -10,17 +11,16 @@ import java.util.Optional;
 
 @AllArgsConstructor
 @Repository
-public class UserRepository {
+public class UserRepository implements Crud {
 
-    private final CrudRepository crudRepository;
-
+    private final SessionFactory sf;
     /**
      * Сохранить в базе.
      * @param user пользователь.
      * @return пользователь с id.
      */
     public User create(User user) {
-        crudRepository.run(session -> session.persist(user));
+        run(session -> session.saveOrUpdate(user), sf);
         return user;
     }
 
@@ -29,7 +29,7 @@ public class UserRepository {
      * @param user пользователь.
      */
     public void update(User user) {
-        crudRepository.run(session -> session.merge(user));
+        run(session -> session.merge(user), sf);
     }
 
     /**
@@ -37,9 +37,10 @@ public class UserRepository {
      * @param userId ID
      */
     public void delete(int userId) {
-        crudRepository.run(
+        run(
                 "delete from User where id = :fId",
-                Map.of("fId", userId)
+                Map.of("fId", userId),
+                sf
         );
     }
 
@@ -48,17 +49,18 @@ public class UserRepository {
      * @return список пользователей.
      */
     public List<User> findAllOrderById() {
-        return crudRepository.query("from User", User.class);
+        return query("from User", User.class, sf);
     }
 
     /**
      * Найти пользователя по ID
      * @return пользователь.
      */
-    public Optional<User> findById(int userId) {
-        return crudRepository.optional(
+    public Optional<User> findById(int id) {
+        return optional(
                 "from User where id = :fId", User.class,
-                Map.of("fId", userId)
+                Map.of("fId", id),
+                sf
         );
     }
 
@@ -68,9 +70,10 @@ public class UserRepository {
      * @return список пользователей.
      */
     public List<User> findByLikeLogin(String key) {
-        return crudRepository.query(
+        return query(
                 "from User where login like :fKey", User.class,
-                Map.of("fKey", "%" + key + "%")
+                Map.of("fKey", "%" + key + "%"),
+                sf
         );
     }
 
@@ -80,9 +83,18 @@ public class UserRepository {
      * @return Optional or user.
      */
     public Optional<User> findByLogin(String login) {
-        return crudRepository.optional(
+        return optional(
                 "from User where login = :fLogin", User.class,
-                Map.of("fLogin", login)
+                Map.of("fLogin", login),
+                sf
+        );
+    }
+
+    public Optional<User> findUserByEmailAndPwd(User user) {
+        return optional(
+                "from User as u where u.login = :fLogin and u.password = :fPassword", User.class,
+                Map.of("fLogin", user.getLogin(), "fPassword", user.getPassword()),
+                sf
         );
     }
 }

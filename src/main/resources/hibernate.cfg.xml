@@ -11,9 +11,15 @@
         <property name="hibernate.connection.pool_size">1</property>
         <property name="hibernate.current_session_context_class">thread</property>
         <property name="hibernate.show_sql">true</property>
+        <property name="hibernate.jdbc.time_zone">UTC</property>
 
         <mapping class="ru.job4j.cars.model.User" />
         <mapping class="ru.job4j.cars.model.Post" />
         <mapping class="ru.job4j.cars.model.PriceHistory" />
+        <mapping class="ru.job4j.cars.model.Participates" />
+        <mapping class="ru.job4j.cars.model.Driver" />
+        <mapping class="ru.job4j.cars.model.Engine" />
+        <mapping class="ru.job4j.cars.model.Car" />
+        <mapping class="ru.job4j.cars.model.OwnerHistory" />
     </session-factory>
 </hibernate-configuration>

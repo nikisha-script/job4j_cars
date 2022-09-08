@@ -1,8 +1,8 @@
 package ru.job4j.cars.store;
 
-import lombok.AllArgsConstructor;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -11,21 +11,18 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-@AllArgsConstructor
 @Repository
-public class CrudRepository {
+public interface Crud {
 
-    private final SessionFactory sf;
-
-    public void run(Consumer<Session> command) {
+    default void run(Consumer<Session> command, SessionFactory sf) {
         tx(session -> {
                     command.accept(session);
                     return null;
-                }
+                }, sf
         );
     }
 
-    public void run(String query, Map<String, Object> args) {
+    default void run(String query, Map<String, Object> args, SessionFactory sf) {
         Consumer<Session> command = session -> {
             var sq = session
                     .createQuery(query);
@@ -34,17 +31,17 @@ public class CrudRepository {
             }
             sq.executeUpdate();
         };
-        run(command);
+        run(command, sf);
     }
 
-    public <T> List<T> query(String query, Class<T> cl) {
+    default <T> List<T> query(String query, Class<T> cl, SessionFactory sf) {
         Function<Session, List<T>> command = session -> session
                 .createQuery(query, cl)
                 .list();
-        return tx(command);
+        return tx(command, sf);
     }
 
-    public <T> Optional<T> optional(String query, Class<T> cl, Map<String, Object> args) {
+    default <T> Optional<T> optional(String query, Class<T> cl, Map<String, Object> args, SessionFactory sf) {
         Function<Session, Optional<T>> command = session -> {
             var sq = session
                     .createQuery(query, cl);
@@ -53,10 +50,10 @@ public class CrudRepository {
             }
             return Optional.ofNullable(sq.getSingleResult());
         };
-        return tx(command);
+        return tx(command, sf);
     }
 
-    public <T> List<T> query(String query, Class<T> cl, Map<String, Object> args) {
+    default <T> List<T> query(String query, Class<T> cl, Map<String, Object> args, SessionFactory sf) {
         Function<Session, List<T>> command = session -> {
             var sq = session
                     .createQuery(query, cl);
@@ -65,10 +62,25 @@ public class CrudRepository {
             }
             return sq.list();
         };
-        return tx(command);
+        return tx(command, sf);
     }
 
-    public <T> T tx(Function<Session, T> command) {
+    default <T> T command(final Function<Session, T> command, SessionFactory sf) {
+        final Session session = sf.openSession();
+        final Transaction tx = session.beginTransaction();
+        try {
+            T rsl = command.apply(session);
+            tx.commit();
+            return rsl;
+        } catch (final Exception e) {
+            session.getTransaction().rollback();
+            throw e;
+        } finally {
+            session.close();
+        }
+    }
+
+    private <T> T tx(Function<Session, T> command, SessionFactory sf) {
         var session = sf.openSession();
         try (session) {
             var tx = session.beginTransaction();
@@ -83,4 +95,5 @@ public class CrudRepository {
             throw e;
         }
     }
+
 }
