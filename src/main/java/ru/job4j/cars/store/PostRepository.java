@@ -17,9 +17,9 @@ public class PostRepository implements Crud {
 
     public List<Post> findAllPostFromLastDay() {
         return query(
-                "from Post as p where created = :fTimestampNow",
+                "from Post as p where created > :fTimestampNow",
                 Post.class,
-                Map.of("fTimestampNow", LocalDateTime.now().getDayOfMonth()),
+                Map.of("fTimestampNow", LocalDateTime.now().minusDays(1)),
                 sf
         );
     }
