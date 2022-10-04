@@ -1,9 +1,11 @@
 package ru.job4j.cars.model;
 
-import lombok.*;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 
 @Entity
@@ -21,12 +23,10 @@ public class User {
 
     @Column(name = "login")
     @NotBlank(message = "login must be not empty")
-    @Min(value = 3, message = "login must be more than 3")
     private String login;
 
     @Column(name = "password")
     @NotBlank(message = "password must be not empty")
-    @Min(value = 3, message = "password must be more than 3")
     private String password;
 
 

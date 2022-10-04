@@ -70,7 +70,7 @@ public class CarController {
         post.setCar(carRsl);
         post.setCreated(LocalDateTime.now());
         post.setUser(userRsl);
-
+        post.setSold(false);
         postService.create(post);
 
         return "redirect:/v1/cars";
@@ -87,13 +87,25 @@ public class CarController {
     }
 
     @GetMapping("/advert/{id}")
-    public String getSession(Model model, @PathVariable("id") Integer id, HttpSession session) {
+    public String advert(Model model, @PathVariable("id") Integer id, HttpSession session) {
         GetHttpSession.getSession(model, session);
         User user = (User) session.getAttribute("user");
         User userRsl = userService.findByLogin(user.getLogin()).get();
         model.addAttribute("user", userRsl);
         model.addAttribute("post", postService.findById(id).get());
         return "/advert";
+    }
+
+    @GetMapping("/sold/{id}")
+    public String soldCar(@PathVariable("id") Integer id, HttpSession session) {
+        User user = (User) session.getAttribute("user");
+        User userRsl = userService.findByLogin(user.getLogin()).get();
+        Post post = postService.findById(id).get();
+        if (post.getUser().equals(userRsl)) {
+            post.setSold(true);
+            postService.create(post);
+        }
+        return "redirect:/v1/cars";
     }
 
 }

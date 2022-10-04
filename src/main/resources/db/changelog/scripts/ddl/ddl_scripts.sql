@@ -69,3 +69,18 @@ alter table auto_posts add column car_id int references cars(id);
 --changset nikishin:aletr_column_at_history_owner
 alter table history_owner alter column startAt set DEFAULT now();
 alter table history_owner alter column endAt set DEFAULT now();
+
+--changeset nikishin:alter_car_add_is_sold
+alter table cars add column is_sold boolean default false;
+
+--changeset nikishin:alter_car_delete_is_sold
+alter table cars drop column is_sold;
+
+--changeset nikishin:alter_post_add_is_sold
+alter table auto_posts add column is_sold boolean default false;
+
+--changeset nikishin:alter_posts_delete_is_sold
+alter table auto_posts drop column is_sold;
+
+--changeset nikishin:alter_posts_add_is_sold
+alter table auto_posts add column is_sold bool default false;

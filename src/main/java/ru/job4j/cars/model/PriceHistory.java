@@ -4,7 +4,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "price_history")
@@ -24,6 +24,6 @@ public class PriceHistory {
     private int after;
 
     @Column(name = "created")
-    private Timestamp created;
+    private LocalDateTime created;
 
 }

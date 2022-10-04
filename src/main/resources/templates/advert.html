@@ -47,7 +47,12 @@
                 <p class="card-text" th:text="${post.text}"></p>
                 <p class="card-text" th:text="${#temporals.format(post.created, 'dd-MM-yyyy,HH:mm')}"></p>
                 <p class="card-text" th:text="${post.user.login}"></p>
-
+                <div th:if="${post.sold}" class="alert alert-danger" role="alert">
+                       Продано
+                </div>
+                <div th:unless="${post.sold}" th:if="${post.user.login == user.login}">
+                    <a class="btn-ticket" th:href="@{|/sold/${post.id}|}">Перевести статус в "продано"</a>
+                </div>
               </div>
             </div>
           </div>

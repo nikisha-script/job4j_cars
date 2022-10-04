@@ -7,6 +7,7 @@ import lombok.EqualsAndHashCode;
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -22,8 +23,7 @@ public class Post {
     private int id;
 
     @Column(name = "text")
-    @NotBlank(message = "text must be not empty")
-    @Min(value = 3, message = "text must be more than 3")
+    @NotNull(message = "this is field must be no null")
     private String text;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
@@ -40,6 +40,10 @@ public class Post {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "car_id")
     private Car car;
+
+    @Column(name = "is_sold")
+    private Boolean sold;
+
 
     @ManyToMany
     @JoinTable(
