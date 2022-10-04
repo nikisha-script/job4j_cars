@@ -3,6 +3,9 @@ package ru.job4j.cars.model;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "engines")
@@ -10,7 +13,6 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Getter
 @Setter
-@RequiredArgsConstructor
 public class Engine {
 
     @Id
@@ -18,10 +20,13 @@ public class Engine {
     @EqualsAndHashCode.Include
     private int id;
 
-    @NonNull
+    @Column(name = "name")
+    @NotBlank(message = "name must be not empty")
+    @Min(value = 3, message = "name must be more than 3")
     private String name;
 
-    @NonNull
+    @Column(name = "power")
+    @NotNull(message = "power must be non null")
     private int power;
 
 }

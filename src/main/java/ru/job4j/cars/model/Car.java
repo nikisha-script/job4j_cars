@@ -3,6 +3,8 @@ package ru.job4j.cars.model;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -12,7 +14,6 @@ import java.util.Set;
 @NoArgsConstructor
 @Getter
 @Setter
-@RequiredArgsConstructor
 public class Car {
 
     @Id
@@ -20,16 +21,16 @@ public class Car {
     @EqualsAndHashCode.Include
     private int id;
 
-    @NonNull
+    @Column(name = "name")
+    @NotBlank(message = "name must be not empty")
+    @Min(value = 3, message = "name must be more than 3")
     private String name;
 
-    @NonNull
     @Column(name = "photo")
     private byte[] photo;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "engine_id")
-    @NonNull
     private Engine engine;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -38,5 +39,6 @@ public class Car {
             inverseJoinColumns = {
                     @JoinColumn(name = "car_id", nullable = false, updatable = false)})
     private Set<Driver> drivers = new HashSet<>();
+
 
 }

@@ -15,21 +15,12 @@ create table if not exists auto_posts (
     auto_user_id int references auto_users(id)
 );
 
---changeset nikishin:insert_user
-insert into auto_users(login,password) values('admin', 'admin');
-
---changeset nikishin:insert_user_task
-INSERT INTO auto_users (login, password) VALUES ('Ivanov', 'root');
-INSERT INTO auto_users (login, password) VALUES ('Petrov', 'root');
-INSERT INTO auto_users (login, password) VALUES ('Sidorov', 'root');
-
-
 --changset nikishin:task_tomany
 CREATE TABLE PRICE_HISTORY(
    id SERIAL PRIMARY KEY,
    before BIGINT not null,
    after BIGINT not null,
-   created TIMESTAMP WITHOUT TIMEZONE DEFAULT now()
+   created TIMESTAMP DEFAULT now()
 );
 
 --changset nikishin:add_post_price_history

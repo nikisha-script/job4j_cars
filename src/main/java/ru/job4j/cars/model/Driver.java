@@ -13,7 +13,6 @@ import java.util.Set;
 @NoArgsConstructor
 @Getter
 @Setter
-@RequiredArgsConstructor
 public class Driver {
 
     @Id
@@ -21,7 +20,6 @@ public class Driver {
     @EqualsAndHashCode.Include
     private int id;
 
-    @NonNull
     private String name;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)

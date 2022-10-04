@@ -7,7 +7,7 @@
 * Spring boot;
 * Thymeleaf;
 * Bootstrap;
-* JDBC;
+* hibernate;
 * Liquibase;
 * H2 Database;
 * Mockito;

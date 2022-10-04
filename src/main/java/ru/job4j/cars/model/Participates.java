@@ -17,5 +17,4 @@ public class Participates {
     private int id;
 
 
-
 }
