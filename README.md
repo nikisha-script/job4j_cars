@@ -4,15 +4,6 @@
 На сайте есть объявления. В объявлении: описание, марка машины, тип кузова, фото. Объявление имеет статус продано или нет.
 
 Стек технологий: 
-* ```Spring boot```
-* ```Thymeleaf```
-* ```Bootstrap```
-* ```hibernate```
-* ```Liquibase```
-* ```H2 Database```
-* ```Mockito```
-* ```Junit```
-* ```Hamcrest```
 
 ![java](https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=java&logoColor=white)
 ![Spring Boot](https://img.shields.io/badge/Spring_Boot-F2F4F9?style=for-the-badge&logo=spring-boot)
@@ -25,7 +16,6 @@
 ![Junit](https://img.shields.io/badge/Junit-test-red)
 ![Mockito](https://img.shields.io/badge/Mockito-test-brightgreen)
 ![H2](https://img.shields.io/badge/H2-Database-yellowgreen)
-
 
 ## ТЗ:
 1. Основная страница. таблица со всеми объявлениям машин на продажу.
