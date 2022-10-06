@@ -46,6 +46,8 @@
                 <h5 class="card-title" th:text="${post.car.name}"></h5>
                 <p class="card-text" th:text="${post.text}"></p>
                 <p class="card-text" th:text="${#temporals.format(post.created, 'dd-MM-yyyy,HH:mm')}"></p>
+                <p class="card-text" th:text="${post.car.engine.name}"></p>
+                <p class="card-text" th:text="${post.car.engine.power}"></p>
                 <p class="card-text" th:text="${post.user.login}"></p>
                 <div th:if="${post.sold}" class="alert alert-danger" role="alert">
                           Продано
