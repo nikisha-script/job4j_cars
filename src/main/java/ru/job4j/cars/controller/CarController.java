@@ -108,4 +108,25 @@ public class CarController {
         return "redirect:/v1/cars";
     }
 
+    @GetMapping("/watch-today")
+    public String watch(Model model, HttpSession session) {
+        GetHttpSession.getSession(model, session);
+        model.addAttribute("posts", postService.findAllPostFromLastDay());
+        return "/today";
+    }
+
+    @GetMapping("/has-photo")
+    public String hasPhoto(Model model, HttpSession session) {
+        GetHttpSession.getSession(model, session);
+        model.addAttribute("posts", postService.findAllPostFromCarHasPhoto());
+        return "/has_photo";
+    }
+
+    @GetMapping("/has-brand")
+    public String hasBrand(Model model, HttpSession session, @RequestParam(name = "brand") String brand) {
+        GetHttpSession.getSession(model, session);
+        model.addAttribute("posts", postService.findAllPostOfCertainBrand(brand));
+        return "/brand_car";
+    }
+
 }

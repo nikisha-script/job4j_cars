@@ -32,12 +32,12 @@ public class PostRepository implements Crud {
 
     public List<Post> findAllPostFromCarHasPhoto() {
         return command(session ->
-                session.createQuery("select c from Post join fetch c.cars where c.photo != null").list(), sf);
+                session.createQuery("select p from Post p join fetch p.car c where c.photo != null").list(), sf);
     }
 
     public List<Post> findAllPostOfCertainBrand(String brand) {
         return query(
-                "select c from Post join fetch c.cars where c.name like :fKey",
+                "select p from Post p join fetch p.car c where c.name like :fKey",
                 Post.class,
                 Map.of("fKey", brand),
                 sf

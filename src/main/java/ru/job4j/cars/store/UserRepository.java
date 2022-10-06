@@ -3,7 +3,6 @@ package ru.job4j.cars.store;
 import lombok.AllArgsConstructor;
 import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
-import ru.job4j.cars.filter.DecoderPassword;
 import ru.job4j.cars.model.User;
 
 import java.util.List;
@@ -22,7 +21,6 @@ public class UserRepository implements Crud {
      * @return пользователь с id.
      */
     public User create(User user) {
-        user.setPassword(DecoderPassword.passwordOfDef(user.getPassword()));
         run(session -> session.saveOrUpdate(user), sf);
         return user;
     }

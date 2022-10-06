@@ -14,7 +14,6 @@ public class CarService {
 
     private final CarRepository carRepository;
 
-
     public Car create(Car car) {
         return carRepository.create(car);
     }
