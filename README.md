@@ -5,17 +5,17 @@
 
 Стек технологий: 
 
-![java](https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=java&logoColor=white)
-![Spring Boot](https://img.shields.io/badge/Spring_Boot-F2F4F9?style=for-the-badge&logo=spring-boot)
-![Bootstrap](https://img.shields.io/badge/Bootstrap-563D7C?style=for-the-badge&logo=bootstrap&logoColor=white)
-![PostgresSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)
-[![Hibernate](https://img.shields.io/badge/Hibernate-59666C?style=for-the-badge&logo=Hibernate&logoColor=white)](https://hibernate.org/)
+![java](https://img.shields.io/badge/Java--17-ED8B00?style=for-the-badge&logo=java&logoColor=white)
+![Spring Boot](https://img.shields.io/badge/Spring_Boot--2.7.3-F2F4F9?style=for-the-badge&logo=spring-boot)
+![Bootstrap](https://img.shields.io/badge/Bootstrap--5.2.2-563D7C?style=for-the-badge&logo=bootstrap&logoColor=white)
+![PostgresSQL](https://img.shields.io/badge/PostgreSQL--42.3.6-316192?style=for-the-badge&logo=postgresql&logoColor=white)
+[![Hibernate](https://img.shields.io/badge/Hibernate--5.6.11-59666C?style=for-the-badge&logo=Hibernate&logoColor=white)](https://hibernate.org/)
 
 ![Thymeleaf](https://img.shields.io/badge/Thymeleaf-3.0.15-blue)
-![Liquibase](https://img.shields.io/badge/Liquibase-core-red)
-![Junit](https://img.shields.io/badge/Junit-test-red)
-![Mockito](https://img.shields.io/badge/Mockito-test-brightgreen)
-![H2](https://img.shields.io/badge/H2-Database-yellowgreen)
+![Liquibase](https://img.shields.io/badge/Liquibase-4.9.1-red)
+![Junit](https://img.shields.io/badge/JUNIT-4.13.2-orange)
+![Mockito](https://img.shields.io/badge/MOCKITO-4.6.1-red)
+![H2](https://img.shields.io/badge/hsqldb-2.7.0-yellowgreen)
 
 ## ТЗ:
 1. Основная страница. таблица со всеми объявлениям машин на продажу.
@@ -35,26 +35,25 @@
 
 1. Создать бд:
 ```sql
-create database cars;
+create database car_sales;
 ```
 
 2. Запуск приложения с maven. Перейдите в корень проекта через командную строку и выполните команды:
 ```
     mvn clean install
     mvn spring-boot:run
-    mvn liquibase:update
 ```
 
 
 ### Основная страница со всеми объявлениями и функционалом:
-![](utils/gn.png)
+![](img/gn.png)
 
 ### Страницы с авторизацией и аутентификацией пользователя: 
-![](utils/reg.png)
-![](utils/auth.png)
+![](img/reg.png)
+![](img/auth.png)
 
 ### Добавление нового объявления:
-![](utils/add.png)
+![](img/add.png)
 
 
 

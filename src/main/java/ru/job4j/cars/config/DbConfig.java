@@ -15,7 +15,7 @@ import javax.sql.DataSource;
 
 @Configuration
 @PropertySource("classpath:data.properties")
-public class MyConfig {
+public class DbConfig {
 
     @Bean(destroyMethod = "close")
     public SessionFactory sf() {
@@ -34,6 +34,10 @@ public class MyConfig {
         ds.setUrl(url);
         ds.setUsername(username);
         ds.setPassword(password);
+
+        ds.setMinIdle(5);
+        ds.setMaxIdle(10);
+        ds.setMaxOpenPreparedStatements(100);
         return ds;
     }
 
