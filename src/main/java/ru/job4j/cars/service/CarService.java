@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import ru.job4j.cars.model.Car;
 import ru.job4j.cars.store.CarRepository;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -16,10 +15,6 @@ public class CarService {
 
     public Car create(Car car) {
         return carRepository.create(car);
-    }
-
-    public List<Car> findAllOrderById() {
-        return carRepository.findAllOrderById();
     }
 
     public Optional<Car> findById(int id) {

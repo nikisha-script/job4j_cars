@@ -10,7 +10,7 @@ create table if not exists auto_users (
 --changset nikishin:add_engine
 create table if not exists engines(
     id serial primary key,
-    name varchar(255) not null,
+    name varchar not null,
 	power int not null
 );
 
@@ -19,7 +19,7 @@ create table cars(
     id serial primary key,
     name text,
     photo bytea,
-    engine_id int not null unique references engines(id)
+    engine_id int not null references engines(id)
 );
 
 --changeset nikishin:Ucreate_auto_post

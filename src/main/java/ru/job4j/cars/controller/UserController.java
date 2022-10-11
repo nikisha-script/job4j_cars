@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import ru.job4j.cars.filter.Md5PasswordEncrypter;
 import ru.job4j.cars.model.User;
 import ru.job4j.cars.service.UserService;
 
@@ -16,6 +17,7 @@ import java.util.Optional;
 public class UserController {
 
         private final UserService service;
+        private final Md5PasswordEncrypter encrypter;
 
         @GetMapping("/registration")
         public String registration(Model model, HttpSession session,
@@ -28,7 +30,7 @@ public class UserController {
 
         @PostMapping("/registration")
         public String registration(@ModelAttribute User user, HttpServletRequest request) {
-                user.setPassword(service.passwordEncryption(user.getPassword()));
+                user.setPassword(encrypter.passwordEncryption(user.getPassword()));
                 User temp = service.create(user);
                 if (temp == null) {
                         return "redirect:/registration?fail=true";
@@ -46,7 +48,7 @@ public class UserController {
 
         @PostMapping("/login")
         public String login(@ModelAttribute User user, HttpServletRequest request) {
-                user.setPassword(service.passwordEncryption(user.getPassword()));
+                user.setPassword(encrypter.passwordEncryption(user.getPassword()));
                 Optional<User> userDb = service.findUserByEmailAndPwd(user);
                 if (userDb.isEmpty()) {
                         return "redirect:/login?fail=true";
