@@ -5,7 +5,6 @@ import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
 import ru.job4j.cars.model.User;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -13,89 +12,27 @@ import java.util.Optional;
 @Repository
 public class UserRepository implements Crud {
 
-    private final SessionFactory sf;
+    private final SessionFactory sessionFactory;
 
-    /**
-     * Сохранить в базе.
-     * @param user пользователь.
-     * @return пользователь с id.
-     */
     public User create(User user) {
-        run(session -> session.saveOrUpdate(user), sf);
+        run(session -> session.saveOrUpdate(user), sessionFactory);
         return user;
     }
 
-    /**
-     * Обновить в базе пользователя.
-     * @param user пользователь.
-     */
-    public void update(User user) {
-        run(session -> session.merge(user), sf);
-    }
 
-    /**
-     * Удалить пользователя по id.
-     * @param userId ID
-     */
-    public void delete(int userId) {
-        run(
-                "delete from User where id = :fId",
-                Map.of("fId", userId),
-                sf
-        );
-    }
-
-    /**
-     * Список пользователь отсортированных по id.
-     * @return список пользователей.
-     */
-    public List<User> findAllOrderById() {
-        return query("from User", User.class, sf);
-    }
-
-    /**
-     * Найти пользователя по ID
-     * @return пользователь.
-     */
-    public Optional<User> findById(int id) {
-        return optional(
-                "from User where id = :fId", User.class,
-                Map.of("fId", id),
-                sf
-        );
-    }
-
-    /**
-     * Список пользователей по login LIKE %key%
-     * @param key key
-     * @return список пользователей.
-     */
-    public List<User> findByLikeLogin(String key) {
-        return query(
-                "from User where login like :fKey", User.class,
-                Map.of("fKey", "%" + key + "%"),
-                sf
-        );
-    }
-
-    /**
-     * Найти пользователя по login.
-     * @param login login.
-     * @return Optional or user.
-     */
     public Optional<User> findByLogin(String login) {
-        return optional(
+        return findOne(
                 "from User where login = :fLogin", User.class,
                 Map.of("fLogin", login),
-                sf
+                sessionFactory
         );
     }
 
     public Optional<User> findUserByEmailAndPwd(User user) {
-        return optional(
+        return findOne(
                 "from User as u where u.login = :fLogin and u.password = :fPassword", User.class,
                 Map.of("fLogin", user.getLogin(), "fPassword", user.getPassword()),
-                sf
+                sessionFactory
         );
     }
 }

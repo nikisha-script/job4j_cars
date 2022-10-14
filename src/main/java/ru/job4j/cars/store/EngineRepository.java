@@ -9,10 +9,10 @@ import ru.job4j.cars.model.Engine;
 @AllArgsConstructor
 public class EngineRepository implements Crud {
 
-    private final SessionFactory sf;
+    private final SessionFactory sessionFactory;
 
     public Engine create(Engine engine) {
-        run(session -> session.saveOrUpdate(engine), sf);
+        run(session -> session.saveOrUpdate(engine), sessionFactory);
         return engine;
     }
 

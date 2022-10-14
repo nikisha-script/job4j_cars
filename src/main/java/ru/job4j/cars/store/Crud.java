@@ -14,15 +14,15 @@ import java.util.function.Function;
 @Repository
 public interface Crud {
 
-    default void run(Consumer<Session> command, SessionFactory sf) {
-        tx(session -> {
+    default void run(Consumer<Session> command, SessionFactory sessionFactory) {
+        wrapRequest(session -> {
                     command.accept(session);
                     return null;
-                }, sf
+                }, sessionFactory
         );
     }
 
-    default void run(String query, Map<String, Object> args, SessionFactory sf) {
+    default void run(String query, Map<String, Object> args, SessionFactory sessionFactory) {
         Consumer<Session> command = session -> {
             var sq = session
                     .createQuery(query);
@@ -31,17 +31,17 @@ public interface Crud {
             }
             sq.executeUpdate();
         };
-        run(command, sf);
+        run(command, sessionFactory);
     }
 
-    default <T> List<T> query(String query, Class<T> cl, SessionFactory sf) {
+    default <T> List<T> findAllWithoutParams(String query, Class<T> cl, SessionFactory sessionFactory) {
         Function<Session, List<T>> command = session -> session
                 .createQuery(query, cl)
                 .list();
-        return tx(command, sf);
+        return wrapRequest(command, sessionFactory);
     }
 
-    default <T> Optional<T> optional(String query, Class<T> cl, Map<String, Object> args, SessionFactory sf) {
+    default <T> Optional<T> findOne(String query, Class<T> cl, Map<String, Object> args, SessionFactory sessionFactory) {
         Function<Session, Optional<T>> command = session -> {
             var sq = session
                     .createQuery(query, cl);
@@ -50,10 +50,10 @@ public interface Crud {
             }
             return Optional.ofNullable(sq.getSingleResult());
         };
-        return tx(command, sf);
+        return wrapRequest(command, sessionFactory);
     }
 
-    default <T> List<T> query(String query, Class<T> cl, Map<String, Object> args, SessionFactory sf) {
+    default <T> List<T> findAllWIthParams(String query, Class<T> cl, Map<String, Object> args, SessionFactory sessionFactory) {
         Function<Session, List<T>> command = session -> {
             var sq = session
                     .createQuery(query, cl);
@@ -62,11 +62,11 @@ public interface Crud {
             }
             return sq.list();
         };
-        return tx(command, sf);
+        return wrapRequest(command, sessionFactory);
     }
 
-    default <T> T command(final Function<Session, T> command, SessionFactory sf) {
-        final Session session = sf.openSession();
+    default <T> T wrapRequest(final Function<Session, T> command, SessionFactory sessionFactory) {
+        final Session session = sessionFactory.openSession();
         final Transaction tx = session.beginTransaction();
         try {
             T rsl = command.apply(session);
@@ -80,20 +80,5 @@ public interface Crud {
         }
     }
 
-    private <T> T tx(Function<Session, T> command, SessionFactory sf) {
-        var session = sf.openSession();
-        try (session) {
-            var tx = session.beginTransaction();
-            T rsl = command.apply(session);
-            tx.commit();
-            return rsl;
-        } catch (Exception e) {
-            var tx = session.getTransaction();
-            if (tx.isActive()) {
-                tx.rollback();
-            }
-            throw e;
-        }
-    }
 
 }

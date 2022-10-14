@@ -5,7 +5,6 @@ import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
 import ru.job4j.cars.model.Car;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -13,22 +12,19 @@ import java.util.Optional;
 @AllArgsConstructor
 public class CarRepository implements Crud {
 
-    private final SessionFactory sf;
+    private final SessionFactory sessionFactory;
 
     public Car create(Car car) {
-        run(session -> session.saveOrUpdate(car), sf);
+        run(session -> session.saveOrUpdate(car), sessionFactory);
         return car;
     }
 
-    public List<Car> findAllOrderById() {
-        return query("from Car", Car.class, sf);
-    }
 
     public Optional<Car> findById(int id) {
-        return optional(
+        return findOne(
                 "from Car where id = :fId", Car.class,
                 Map.of("fId", id),
-                sf
+                sessionFactory
         );
     }
 

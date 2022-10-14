@@ -14,45 +14,45 @@ import java.util.Optional;
 @AllArgsConstructor
 public class PostRepository implements Crud {
 
-    private final SessionFactory sf;
+    private final SessionFactory sessionFactory;
 
     public Post create(Post post) {
-        run(session -> session.saveOrUpdate(post), sf);
+        run(session -> session.saveOrUpdate(post), sessionFactory);
         return post;
     }
 
     public List<Post> findAllPostFromLastDay() {
-        return query(
+        return findAllWIthParams(
                 "from Post as p where created > :fTimestampNow",
                 Post.class,
                 Map.of("fTimestampNow", LocalDateTime.now().minusDays(1)),
-                sf
+                sessionFactory
         );
     }
 
-    public List<Post> findAllPostFromCarHasPhoto() {
-        return command(session ->
-                session.createQuery("select p from Post p join fetch p.car c where c.photo != null").list(), sf);
+    public List findAllPostFromCarHasPhoto() {
+        return wrapRequest(session ->
+                session.createQuery("select p from Post p join fetch p.car c where c.photo != null").list(), sessionFactory);
     }
 
     public List<Post> findAllPostOfCertainBrand(String brand) {
-        return query(
+        return findAllWIthParams(
                 "select p from Post p join fetch p.car c where c.name like :fKey",
                 Post.class,
                 Map.of("fKey", brand),
-                sf
+                sessionFactory
         );
     }
 
     public List<Post> findAllOrderById() {
-        return query("from Post", Post.class, sf);
+        return findAllWithoutParams("from Post", Post.class, sessionFactory);
     }
 
     public Optional<Post> findById(int id) {
-        return optional(
+        return findOne(
                 "from Post where id = :fId", Post.class,
                 Map.of("fId", id),
-                sf
+                sessionFactory
         );
     }
 
