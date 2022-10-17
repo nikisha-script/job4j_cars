@@ -49,7 +49,7 @@ public class UserController {
         @PostMapping("/login")
         public String login(@ModelAttribute User user, HttpServletRequest request) {
                 user.setPassword(encrypter.passwordEncryption(user.getPassword()));
-                Optional<User> userDb = service.findUserByEmailAndPwd(user);
+                Optional<User> userDb = service.findUserByEmailAndPassword(user.getLogin(), user.getPassword());
                 if (userDb.isEmpty()) {
                         return "redirect:/login?fail=true";
                 }

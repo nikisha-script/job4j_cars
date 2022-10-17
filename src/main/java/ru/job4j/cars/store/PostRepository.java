@@ -22,7 +22,7 @@ public class PostRepository implements Crud {
     }
 
     public List<Post> findAllPostFromLastDay() {
-        return findAllWIthParams(
+        return findAllWithParams(
                 "from Post as p where created > :fTimestampNow",
                 Post.class,
                 Map.of("fTimestampNow", LocalDateTime.now().minusDays(1)),
@@ -30,13 +30,13 @@ public class PostRepository implements Crud {
         );
     }
 
-    public List findAllPostFromCarHasPhoto() {
+    public List<Post> findAllPostFromCarHasPhoto() {
         return wrapRequest(session ->
                 session.createQuery("select p from Post p join fetch p.car c where c.photo != null").list(), sessionFactory);
     }
 
     public List<Post> findAllPostOfCertainBrand(String brand) {
-        return findAllWIthParams(
+        return findAllWithParams(
                 "select p from Post p join fetch p.car c where c.name like :fKey",
                 Post.class,
                 Map.of("fKey", brand),

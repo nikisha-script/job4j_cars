@@ -40,6 +40,7 @@ public class CarController {
     @GetMapping("/add")
     public String getAddCar(Model model, HttpSession httpSession) {
         GetHttpSession.getSession(model, httpSession);
+        model.addAttribute("engines", engineService.findAllEngines());
         return "add";
     }
 
@@ -47,24 +48,16 @@ public class CarController {
     public String addPost(@RequestParam (name = "name-car") String nameCar,
                           @RequestParam (name = "file") MultipartFile photo,
                           @RequestParam (name = "name-engine") String nameEngine,
-                          @RequestParam (name = "power-engine") String powerEngine,
                           @RequestParam (name = "name-post") String namePost,
                           HttpSession httpSession) throws IOException {
         User user = (User) httpSession.getAttribute("user");
         User userRsl = userService.findByLogin(user.getLogin()).get();
-
         Car car = new Car();
         car.setName(nameCar);
         car.setPhoto(photo.getBytes());
-
-        Engine engine = new Engine();
-        engine.setName(nameEngine);
-        engine.setPower(Integer.parseInt(powerEngine));
-        Engine rsl = engineService.create(engine);
-
-        car.setEngine(rsl);
+        Engine engine = engineService.findEngineByName(nameEngine).get();
+        car.setEngine(engine);
         Car carRsl = carService.create(car);
-
         Post post = new Post();
         post.setText(namePost);
         post.setCar(carRsl);

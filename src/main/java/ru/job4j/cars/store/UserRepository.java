@@ -28,10 +28,10 @@ public class UserRepository implements Crud {
         );
     }
 
-    public Optional<User> findUserByEmailAndPwd(User user) {
+    public Optional<User> findUserByEmailAndPassword(String login, String password) {
         return findOne(
                 "from User as u where u.login = :fLogin and u.password = :fPassword", User.class,
-                Map.of("fLogin", user.getLogin(), "fPassword", user.getPassword()),
+                Map.of("fLogin", login, "fPassword", password),
                 sessionFactory
         );
     }

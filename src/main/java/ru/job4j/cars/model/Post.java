@@ -35,7 +35,7 @@ public class Post {
     private Car car;
 
     @Column(name = "is_sold")
-    private Boolean sold;
+    private boolean sold;
 
 
 }

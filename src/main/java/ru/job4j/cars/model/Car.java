@@ -29,7 +29,7 @@ public class Car {
     @NotNull(message = "this is field must be no null")
     private byte[] photo;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "engine_id")
     private Engine engine;
 

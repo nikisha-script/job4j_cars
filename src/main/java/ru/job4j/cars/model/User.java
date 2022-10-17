@@ -7,13 +7,13 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.util.Objects;
 
 @Entity
 @Table(name = "auto_users")
 @NoArgsConstructor
 @Getter
 @Setter
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class User {
 
     @Id
@@ -30,4 +30,31 @@ public class User {
     private String password;
 
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        User user = (User) o;
+
+        if (id != user.id) {
+            return false;
+        }
+        if (!Objects.equals(login, user.login)) {
+            return false;
+        }
+        return Objects.equals(password, user.password);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id;
+        result = 31 * result + (login != null ? login.hashCode() : 0);
+        result = 31 * result + (password != null ? password.hashCode() : 0);
+        return result;
+    }
 }

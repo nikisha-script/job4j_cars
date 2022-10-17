@@ -53,10 +53,9 @@
                                         <label for="photo">Фотография</label>
                                         <input type="file" class="form-control" name="file" id="file" required>
                                 </div>
-                               <label for="name">Название двигателя</label>
-                               <input type="text" class="form-control" name="name-engine" id="name-engine">
-                               <label for="name">Мощность двигателя</label>
-                               <input type="text" class="form-control" name="power-engine" id="power-engine">
+                                <select class="form-control" id="name-engine" name="name-engine" multiple="multiple">
+                                      <option th:each="engine : ${engines}" th:value="${engine.name}" th:text="${engine.name}">
+                                </select>
                            </div>
                            <button type="submit" class="btn btn-primary">Сохранить</button>
                        </form>

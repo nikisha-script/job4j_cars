@@ -53,7 +53,7 @@ public interface Crud {
         return wrapRequest(command, sessionFactory);
     }
 
-    default <T> List<T> findAllWIthParams(String query, Class<T> cl, Map<String, Object> args, SessionFactory sessionFactory) {
+    default <T> List<T> findAllWithParams(String query, Class<T> cl, Map<String, Object> args, SessionFactory sessionFactory) {
         Function<Session, List<T>> command = session -> {
             var sq = session
                     .createQuery(query, cl);
