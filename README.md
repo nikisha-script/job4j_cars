@@ -56,5 +56,9 @@ create database car_sales;
 ### Добавление нового объявления:
 ![](img/add.png)
 
+## Контакты
+
+email: danya.nikisha@mail.ru
+
 
 
