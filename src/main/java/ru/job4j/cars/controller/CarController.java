@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 import ru.job4j.cars.filter.GetHttpSession;
 import ru.job4j.cars.model.Car;
 import ru.job4j.cars.model.Engine;
@@ -26,6 +28,7 @@ import ru.job4j.cars.service.UserService;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
@@ -51,18 +54,24 @@ public class CarController {
                           @RequestParam (name = "name-post") String namePost,
                           HttpSession httpSession) throws IOException {
         User user = (User) httpSession.getAttribute("user");
-        User userRsl = userService.findByLogin(user.getLogin()).get();
+        Optional<User> userRsl = userService.findByLogin(user.getLogin());
+        if (userRsl.isEmpty()) {
+            return "/404";
+        }
         Car car = new Car();
         car.setName(nameCar);
         car.setPhoto(photo.getBytes());
-        Engine engine = engineService.findEngineByName(nameEngine).get();
-        car.setEngine(engine);
+        Optional<Engine> engine = engineService.findEngineByName(nameEngine);
+        if (engine.isEmpty()) {
+            return "/404";
+        }
+        car.setEngine(engine.get());
         Car carRsl = carService.create(car);
         Post post = new Post();
         post.setText(namePost);
         post.setCar(carRsl);
         post.setCreated(LocalDateTime.now());
-        post.setUser(userRsl);
+        post.setUser(userRsl.get());
         post.setSold(false);
         postService.create(post);
 
@@ -71,11 +80,13 @@ public class CarController {
 
     @GetMapping("/photo/{id}")
     public ResponseEntity<Resource> downloadPhoto(@PathVariable("id") Integer id) {
-        Car car = carService.findById(id).get();
+        Car car = carService.findById(id).orElseThrow(() -> {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Car is not found");
+        });
         return ResponseEntity.ok()
                 .headers(new HttpHeaders())
                 .contentLength(car.getPhoto().length)
-                .contentType(MediaType.parseMediaType("application/octet-stream"))
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
                 .body(new ByteArrayResource(car.getPhoto()));
     }
 
@@ -83,20 +94,27 @@ public class CarController {
     public String advert(Model model, @PathVariable("id") Integer id, HttpSession session) {
         GetHttpSession.getSession(model, session);
         User user = (User) session.getAttribute("user");
-        User userRsl = userService.findByLogin(user.getLogin()).get();
-        model.addAttribute("user", userRsl);
-        model.addAttribute("post", postService.findById(id).get());
+        Optional<User> userRsl = userService.findByLogin(user.getLogin());
+        Optional<Post> postRsl = postService.findById(id);
+        if (userRsl.isEmpty() || postRsl.isEmpty()) {
+            return "/404";
+        }
+         model.addAttribute("user", userRsl.get());
+        model.addAttribute("post", postRsl.get());
         return "/advert";
     }
 
     @GetMapping("/sold/{id}")
     public String soldCar(@PathVariable("id") Integer id, HttpSession session) {
         User user = (User) session.getAttribute("user");
-        User userRsl = userService.findByLogin(user.getLogin()).get();
-        Post post = postService.findById(id).get();
-        if (post.getUser().equals(userRsl)) {
-            post.setSold(true);
-            postService.create(post);
+        Optional<User> userRsl = userService.findByLogin(user.getLogin());
+        Optional<Post> post = postService.findById(id);
+        if (userRsl.isEmpty() || post.isEmpty()) {
+            return "/404";
+        }
+        if (post.get().getUser().equals(userRsl)) {
+            post.get().setSold(true);
+            postService.create(post.get());
         }
         return "redirect:/v1/cars";
     }

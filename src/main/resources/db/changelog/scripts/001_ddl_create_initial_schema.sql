@@ -3,7 +3,7 @@
 --changeset nikishin:Ucreate_auto_user
 create table if not exists auto_users (
     id serial primary key,
-    login text,
+    login text unique,
     password text
 );
 

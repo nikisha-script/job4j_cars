@@ -3,7 +3,7 @@ package ru.job4j.cars.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.job4j.cars.model.Car;
-import ru.job4j.cars.store.CarRepository;
+import ru.job4j.cars.repository.CarRepository;
 
 import java.util.Optional;
 
