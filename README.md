@@ -57,7 +57,6 @@ create database car_sales;
 ![](img/add.png)
 
 ## Контакты
-
 email: danya.nikisha@mail.ru
 
 
