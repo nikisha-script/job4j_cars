@@ -14,9 +14,9 @@ public class UserRepository implements Crud {
 
     private final SessionFactory sessionFactory;
 
-    public User create(User user) {
+    public Optional<User> create(User user) {
         run(session -> session.saveOrUpdate(user), sessionFactory);
-        return user;
+        return Optional.of(user);
     }
 
 

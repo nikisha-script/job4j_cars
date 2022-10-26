@@ -31,8 +31,8 @@ public class UserController {
         @PostMapping("/registration")
         public String registration(@ModelAttribute User user, HttpServletRequest request) {
                 user.setPassword(encrypter.passwordEncryption(user.getPassword()));
-                User temp = service.create(user);
-                if (temp == null) {
+                Optional<User> temp = service.create(user);
+                if (temp.isEmpty()) {
                         return "redirect:/registration?fail=true";
                 }
                 HttpSession session = request.getSession();

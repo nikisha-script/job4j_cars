@@ -13,7 +13,7 @@ public class UserService {
 
     private final UserRepository store;
 
-    public User create(User user) {
+    public Optional<User> create(User user) {
         return store.create(user);
     }
 
