@@ -1,6 +1,5 @@
 package ru.job4j.cars.model;
 
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,7 +9,6 @@ import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "engines")
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @NoArgsConstructor
 @Getter
 @Setter
@@ -18,7 +16,6 @@ public class Engine {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @EqualsAndHashCode.Include
     private int id;
 
     @Column(name = "name")
@@ -29,4 +26,22 @@ public class Engine {
     @NotNull(message = "power must be non null")
     private int power;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        Engine engine = (Engine) o;
+
+        return id == engine.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return id;
+    }
 }

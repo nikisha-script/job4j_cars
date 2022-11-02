@@ -15,9 +15,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
+import ru.job4j.cars.dto.CarDto;
+import ru.job4j.cars.dto.UserDto;
 import ru.job4j.cars.filter.GetHttpSession;
 import ru.job4j.cars.model.Car;
-import ru.job4j.cars.model.Engine;
 import ru.job4j.cars.model.Post;
 import ru.job4j.cars.model.User;
 import ru.job4j.cars.service.CarService;
@@ -27,7 +28,7 @@ import ru.job4j.cars.service.UserService;
 
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.time.LocalDateTime;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Controller
@@ -54,28 +55,24 @@ public class CarController {
                           @RequestParam (name = "name-post") String namePost,
                           HttpSession httpSession) throws IOException {
         User user = (User) httpSession.getAttribute("user");
-        Optional<User> userRsl = userService.findByLogin(user.getLogin());
-        if (userRsl.isEmpty()) {
+        try {
+            UserDto userDto = UserDto.builder()
+                    .userName(user.getLogin())
+                    .build();
+            CarDto carDto = CarDto.builder()
+                    .name(nameCar)
+                    .photo(photo.getBytes())
+                    .engineName(nameEngine)
+                    .nameOfPost(namePost)
+                    .build();
+
+            carService.create(carDto, userDto);
+        } catch (NoSuchElementException e) {
             return "/404";
         }
-        Car car = new Car();
-        car.setName(nameCar);
-        car.setPhoto(photo.getBytes());
-        Optional<Engine> engine = engineService.findEngineByName(nameEngine);
-        if (engine.isEmpty()) {
-            return "/404";
-        }
-        car.setEngine(engine.get());
-        Car carRsl = carService.create(car);
-        Post post = new Post();
-        post.setText(namePost);
-        post.setCar(carRsl);
-        post.setCreated(LocalDateTime.now());
-        post.setUser(userRsl.get());
-        post.setSold(false);
-        postService.create(post);
 
         return "redirect:/v1/cars";
+
     }
 
     @GetMapping("/photo/{id}")
@@ -99,7 +96,7 @@ public class CarController {
         if (userRsl.isEmpty() || postRsl.isEmpty()) {
             return "/404";
         }
-         model.addAttribute("user", userRsl.get());
+        model.addAttribute("user", userRsl.get());
         model.addAttribute("post", postRsl.get());
         return "/advert";
     }

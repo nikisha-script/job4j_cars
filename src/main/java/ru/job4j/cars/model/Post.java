@@ -1,8 +1,10 @@
 package ru.job4j.cars.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -10,13 +12,14 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "auto_posts")
-@Data
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Getter
+@Setter
+@ToString
+@NoArgsConstructor
 public class Post {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @EqualsAndHashCode.Include
     private int id;
 
     @Column(name = "text")
@@ -37,5 +40,20 @@ public class Post {
     @Column(name = "is_sold")
     private boolean sold;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Post post = (Post) o;
+        return id == post.id;
+    }
 
+    @Override
+    public int hashCode() {
+        return id;
+    }
 }
