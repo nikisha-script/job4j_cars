@@ -3,8 +3,10 @@ package ru.job4j.cars.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import ru.job4j.cars.filter.Md5PasswordEncrypter;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import ru.job4j.cars.model.User;
 import ru.job4j.cars.service.UserService;
 
@@ -17,7 +19,6 @@ import java.util.Optional;
 public class UserController {
 
         private final UserService service;
-        private final Md5PasswordEncrypter encrypter;
 
         @GetMapping("/registration")
         public String registration(Model model, HttpSession session,
@@ -30,7 +31,6 @@ public class UserController {
 
         @PostMapping("/registration")
         public String registration(@ModelAttribute User user, HttpServletRequest request) {
-                user.setPassword(encrypter.passwordEncryption(user.getPassword()));
                 Optional<User> temp = service.create(user);
                 if (temp.isEmpty()) {
                         return "redirect:/registration?fail=true";
@@ -48,8 +48,7 @@ public class UserController {
 
         @PostMapping("/login")
         public String login(@ModelAttribute User user, HttpServletRequest request) {
-                user.setPassword(encrypter.passwordEncryption(user.getPassword()));
-                Optional<User> userDb = service.findUserByEmailAndPassword(user.getLogin(), user.getPassword());
+                Optional<User> userDb = service.findUserByEmailAndPassword(user);
                 if (userDb.isEmpty()) {
                         return "redirect:/login?fail=true";
                 }

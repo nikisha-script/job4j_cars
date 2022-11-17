@@ -3,6 +3,7 @@ package ru.job4j.cars.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.job4j.cars.model.Post;
+import ru.job4j.cars.model.User;
 import ru.job4j.cars.repository.PostRepository;
 
 import java.util.List;
@@ -14,8 +15,12 @@ public class PostService {
 
     private final PostRepository postRepository;
 
-    public Post create(Post post) {
-        return postRepository.create(post);
+    public Post createOrUpdate(Post post, User user) {
+        if (post.getUser().equals(user)) {
+            post.setSold(true);
+            return postRepository.createOrUpdate(post);
+        }
+        return post;
     }
 
     public List<Post> findAllPostFromLastDay() {

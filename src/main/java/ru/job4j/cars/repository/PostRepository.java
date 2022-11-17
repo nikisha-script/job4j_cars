@@ -16,7 +16,7 @@ public class PostRepository implements Crud {
 
     private final SessionFactory sessionFactory;
 
-    public Post create(Post post) {
+    public Post createOrUpdate(Post post) {
         run(session -> session.saveOrUpdate(post), sessionFactory);
         return post;
     }

@@ -52,7 +52,7 @@ public class CarService {
         post.setUser(userRsl.get());
         post.setSold(false);
 
-        postRepository.create(post);
+        postRepository.createOrUpdate(post);
 
         return carSave;
 

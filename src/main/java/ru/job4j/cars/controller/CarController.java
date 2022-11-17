@@ -109,10 +109,8 @@ public class CarController {
         if (userRsl.isEmpty() || post.isEmpty()) {
             return "/404";
         }
-        if (post.get().getUser().equals(userRsl.get())) {
-            post.get().setSold(true);
-            postService.create(post.get());
-        }
+        postService.createOrUpdate(post.get(), userRsl.get());
+
         return "redirect:/v1/cars";
     }
 

@@ -49,7 +49,7 @@ public class PostRepositoryTest {
         Car resultCar = carRepository.create(car);
         post.setCar(resultCar);
         post.setSold(false);
-        Post postSave = postRepository.create(post);
+        Post postSave = postRepository.createOrUpdate(post);
         post.setId(1);
         assertThat(postSave.getId(), Is.is(post.getId()));
     }
@@ -74,7 +74,7 @@ public class PostRepositoryTest {
         Car resultCar = carRepository.create(car);
         post.setCar(resultCar);
         post.setSold(false);
-        Post postSave = postRepository.create(post);
+        Post postSave = postRepository.createOrUpdate(post);
         List<Post> expected = List.of(postSave);
         assertThat(expected, Is.is(postRepository.findAllPostFromLastDay()));
     }
@@ -99,7 +99,7 @@ public class PostRepositoryTest {
         Car resultCar = carRepository.create(car);
         post.setCar(resultCar);
         post.setSold(false);
-        Post postSave = postRepository.create(post);
+        Post postSave = postRepository.createOrUpdate(post);
         List<Post> expected = List.of(postSave);
         assertThat(expected, Is.is(postRepository.findAllPostFromCarHasPhoto()));
     }
@@ -124,7 +124,7 @@ public class PostRepositoryTest {
         Car resultCar = carRepository.create(car);
         post.setCar(resultCar);
         post.setSold(false);
-        Post postSave = postRepository.create(post);
+        Post postSave = postRepository.createOrUpdate(post);
         List<Post> expected = List.of(postSave);
         assertThat(expected, Is.is(postRepository.findAllPostOfCertainBrand("test4")));
     }
@@ -149,7 +149,7 @@ public class PostRepositoryTest {
         Car resultCar = carRepository.create(car);
         post.setCar(resultCar);
         post.setSold(false);
-        Post postSave = postRepository.create(post);
+        Post postSave = postRepository.createOrUpdate(post);
         Optional<Post> expected = postRepository.findById(postSave.getId());
         Assert.assertNotNull(expected.get());
     }
